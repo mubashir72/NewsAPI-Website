@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NewsAPP</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">News App</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a id="sports" class="nav-link" href="#">Sports</a>
+            </li>
+            <li class="nav-item">
+              <a id="finance" class="nav-link" href="#">Fiance</a>
+            </li>
+            <li class="nav-item">
+              <a id="politics" class="nav-link" href="#">Politics</a>
+            </li>
+            <li class="nav-item">
+              <a id="technology" class="nav-link" href="#">Technology</a>
+            </li>
+          </ul>
+          <form class="d-flex" role="search">
+            <input
+              id="searchInput"
+              class="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+            />
+            <button id="search" class="btn btn-outline-success" type="submit">
+              Search
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h1>News</h1>
+      <div class="row content"></div>
+      <div class="d-flex justify-content-around my-4">
+        <button class="btn btn-primary" id="previous">
+          &lt;&lt; Previous Page
+        </button>
+        <button class="btn btn-primary" id="next">Next Page &gt;&gt;</button>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      let currentQuery = "general";
+      let currentPage = 1;
+
+      const fetchNews = async (page, query) => {
+        console.log(`Fetching news for ${query}, Page number ${page}`);
+
+        apikey = "4d19d40a486a38c0fe2310e200cb54d1";
+        var url =
+          "https://gnews.io/api/v4/search?q=" +
+          query +
+          "&pageSize=8&page=" +
+          page +
+          "&lang=en&country=pk&max=20&apikey=" +
+          apikey;
+
+        var req = new Request(url);
+
+        let a = await fetch(req);
+        let response = await a.json();
+        /* let response = {
+          totalArticles: 149,
+          articles: [
+            {
+              title:
+                "Meghan Markle's supporter apologises to Kate Middleton to set example for Duchess",
+              description:
+                "US talk show host, who's known as Meghan Markle's supporter, has apologised personally to cancer-stricken Kate Middleton for her past mistake.Sheryl Underwood, who became, part of conspiracy...",
+              content:
+                "US TV host Sheryl Underwood sets example for Meghan Markle with her brave decision\nUS talk show host, who's known as Meghan Markle's supporter, has apologised personally to cancer-stricken Kate Middleton for her past mistake.\nSheryl Underwood, who be... [1604 chars]",
+              url: "https://www.thenews.com.pk/latest/1172921-meghan-markles-supporter-apologises-to-kate-middleton-to-set-example-for-duchess",
+              image:
+                "https://www.thenews.com.pk/assets/uploads/updates/2024-03-27/l_1172921_084513_updates.jpg",
+              publishedAt: "2024-03-26T19:00:00Z",
+              source: {
+                name: "The News International",
+                url: "https://www.thenews.com.pk",
+              },
+            },
+            {
+              title:
+                "Dutchman sets Guinness world record for longest-surviving transplant patient",
+              description:
+                "Ever wonder about the extraordinary life journey people who receive heart transplants take? We present to you today the incredible tale of Bert Janssen, a living example of the opportunities...",
+              content:
+                "Bert Janssen and his wife Petra, with the framed certificate from the 'Guinness Book of Records', stating that he is the longest-living patient with a donor heart in the world. — Jeroen Kuit\nEver wonder about the extraordinary life journey people who... [2167 chars]",
+              url: "https://www.thenews.com.pk/latest/1164549-dutchman-sets-guinness-world-record-for-longest-surviving-transplant-patient",
+              image:
+                "https://www.thenews.com.pk/assets/uploads/updates/2024-03-05/l_1164549_035719_updates.jpg",
+              publishedAt: "2024-03-03T19:00:00Z",
+              source: {
+                name: "The News International",
+                url: "https://www.thenews.com.pk",
+              },
+            },
+            {
+              title:
+                "Wolfgang Puck's leadership style starts at the top: 'I lead by example'",
+              description:
+                "Wolfgang Puck's dynamic personality, engaging leadership style, and innovative culinary chops set the stage for his celebrity chef journey. Here's how he leads his multimillion-dollar empire today.",
+              content:
+                "The fine dining sector has faced increased scrutiny over the past several years with allegations of toxic work environments and low pay.\nMany employees have fled the industry altogether, especially since the pandemic when restaurants shut down and wo... [3478 chars]",
+              url: "https://finance.yahoo.com/news/wolfgang-pucks-leadership-style-starts-at-the-top-i-lead-by-example-113047435.html",
+              image:
+                "https://s.yimg.com/ny/api/res/1.2/fHyC04tD5fXx208R_QUzHw--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyMDA7aD02Njk-/https://s.yimg.com/os/creatr-uploaded-images/2024-01/e2959d20-b632-11ee-af2f-aa52cba03071",
+              publishedAt: "2024-01-26T11:30:47Z",
+              source: {
+                name: "Yahoo Finance",
+                url: "https://finance.yahoo.com",
+              },
+            },
+            {
+              title:
+                "Princess Kate sends important message to admirers amid recovery",
+              description:
+                "Princess Kate sets a 'great example' for her fans as she prioritises her health and halted royal duties after her abdominal surgery. For the unversed, Kensington Palace released an official...",
+              content:
+                "Princess Kate sends important message to admirers amid recovery\nPrincess Kate sets a 'great example' for her fans as she prioritises her health and halted royal duties after her abdominal surgery.\nFor the unversed, Kensington Palace released an offic... [1008 chars]",
+              url: "https://www.thenews.com.pk/latest/1151576-princess-kate-sends-important-message-to-admirers-amid-recovery",
+              image:
+                "https://www.thenews.com.pk/assets/uploads/updates/2024-01-26/l_1151576_074108_updates.jpg",
+              publishedAt: "2024-01-25T19:00:00Z",
+              source: {
+                name: "The News International",
+                url: "https://www.thenews.com.pk",
+              },
+            },
+            {
+              title:
+                "Iran not ‘well-liked’ in region, says Biden after Pakistan strikes",
+              description:
+                "The United States has termed Iran’s strike on Pakistan as another example of “destabilisng behavior,” with President Joe Biden saying the recent clashes between the neighbouring...",
+              content:
+                "US President Joe Biden speaks on his economic plan for the country at Abbot´s Creek Community Center on January 18, 2024 in Raleigh, North Carolina. — AFP\nThe United States has termed Iran’s strike on Pakistan as another example of “destabilisng beha... [3042 chars]",
+              url: "https://www.thenews.com.pk/latest/1149320-iran-not-well-liked-in-region-says-biden-after-pakistan-strikes",
+              image:
+                "https://www.thenews.com.pk/assets/uploads/updates/2024-01-19/l_1149320_094002_updates.jpg",
+              publishedAt: "2024-01-18T19:00:00Z",
+              source: {
+                name: "The News International",
+                url: "https://www.thenews.com.pk",
+              },
+            },
+            {
+              title:
+                "SC wants to set better example in ZA Bhutto reference, says CJ",
+              description:
+                "ISLAMABAD: Chief Justice Qazi Faez Isa on Monday said that the apex court wanted to “set a better example” in the presidential reference seeking to review the capital punishment awarded...",
+              content:
+                "CJP Qazi Faez Isa. — PPI/File\nISLAMABAD: Chief Justice (CJ) Qazi Faez Isa on Monday said that the apex court wanted to “set a better example” in the presidential reference seeking to review the capital punishment awarded to former prime minister and ... [3770 chars]",
+              url: "https://www.thenews.com.pk/latest/1145853-sc-wants-to-set-better-example-in-za-bhutto-reference-says-cj",
+              image:
+                "https://www.thenews.com.pk/assets/uploads/updates/2024-01-08/l_1145853_031748_updates.jpg",
+              publishedAt: "2024-01-07T19:00:00Z",
+              source: {
+                name: "The News International",
+                url: "https://www.thenews.com.pk",
+              },
+            },
+            {
+              title:
+                "Fair elections not possible under CEC Raja: top lawyers’ bodies",
+              description:
+                "PBC cites glaring example of seats allocation; SCBA urges incumbent election commissioner to go home",
+              content:
+                "Chief Election Commissioner Sikander Sultan Raja addressing a ceremony. — ECP website/File\nThe Pakistan Bar Council (PBC) and Supreme Court Bar Association (SCBA) — the top lawyers’ bodies of the country — have raised concerns over the transparency o... [4294 chars]",
+              url: "https://www.thenews.com.pk/latest/1139811-fair-elections-not-possible-under-cec-raja-top-lawyers-bodies",
+              image:
+                "https://www.thenews.com.pk/assets/uploads/updates/2023-12-19/l_1139811_035528_updates.jpg",
+              publishedAt: "2023-12-18T19:00:00Z",
+              source: {
+                name: "The News International",
+                url: "https://www.thenews.com.pk",
+              },
+            },
+            {
+              title:
+                "Ask an Advisor: I'm Losing Money on Investments. How Can My Advisor Let This Happen?",
+              description:
+                "I'm constantly losing money on stock and cryptocurrency investments. And I paid for the advice that has given me the information that I've used to do this. For example, I was told to buy SoFi and lost money the whole … Continue reading → The post Ask an Advisor: I'm Losing Money on Investments. How Can My Advisor Let This Happen? appeared first on SmartAsset Blog.",
+              content:
+                "Susannah Snider, CFP\nI’m constantly losing money on stock and cryptocurrency investments. And I paid for the advice that has given me the information that I’ve used to do this. For example, I was told to buy a specific stock and lost money the whole ... [8341 chars]",
+              url: "https://finance.yahoo.com/news/ask-advisor-im-losing-money-163430213.html",
+              image:
+                "https://media.zenfs.com/en/smartasset_475/f9a11a294c490e9f885c47961be453ad",
+              publishedAt: "2023-11-26T17:08:52Z",
+              source: {
+                name: "Yahoo Finance",
+                url: "https://finance.yahoo.com",
+              },
+            },
+          ],
+        };
+        // */
+        let str = "";
+        for (let item of response.articles) {
+          str =
+            str +
+            `<div class="card my-4 mx-2" style="width: 18rem">
+                <img height="184" src="${
+                  item.image
+                }" class="card-img-top" alt="..." />
+                <div class="card-body">
+                  <h5 class="card-title">${item.title.slice(0, 50)}</h5>
+                  <p class="card-text">
+                    ${item.description.slice(0, 123)}
+                  </p>
+                  <a href="${
+                    item.url
+                  }" target="_blank" class="btn btn-primary">Go somewhere</a>
+                </div>
+              </div>`;
+        }
+        document.querySelector(".content").innerHTML = str;
+      };
+      fetchNews(1, currentQuery);
+      search.addEventListener("click", (e) => {
+        e.preventDefault;
+        let query = searchInput.value;
+        currentQuery = query;
+        fetchNews(1, query);
+      });
+      previous.addEventListener("click", (e) => {
+        e.preventDefault;
+        if (currentPage > 1) {
+          currentPage = currentPage - 1;
+          let query = searchInput.value;
+          currentQuery = query;
+          fetchNews(currentPage, currentQuery);
+        }
+      });
+      next.addEventListener("click", (e) => {
+        e.preventDefault;
+        currentPage = currentPage + 1;
+        let query = searchInput.value;
+        currentQuery = query;
+        fetchNews(currentPage, currentQuery);
+      });
+      sports.addEventListener("click", (e) => {
+        e.preventDefault;
+        fetchNews(1, "sports");
+      });
+      finance.addEventListener("click", (e) => {
+        e.preventDefault;
+        fetchNews(1, "finance");
+      });
+      technology.addEventListener("click", (e) => {
+        e.preventDefault;
+        fetchNews(1, "technology");
+      });
+      politics.addEventListener("click", (e) => {
+        e.preventDefault;
+        fetchNews(1, "politics");
+      });
+    </script>
+  </body>
+</html>
